@@ -6,9 +6,11 @@ import svgwrite
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-i", help="Path to source image", type=str)
-parser.add_argument("-s", help="Image size", type=int)
+parser.add_argument("-s", help="Image output resolution", type=int)
 parser.add_argument("-c", help="Number of colors", type=int)
 args = parser.parse_args()
+
+PATH = args.i
 
 if args.s:
     IMAGE_SIZE = args.s
@@ -19,6 +21,8 @@ if args.c:
     COLORS = args.c
 else:
     COLORS = 8
+
+SVG_PATH = '.'.join([PATH, 's{}'.format(IMAGE_SIZE), 'c{}'.format(COLORS), 'svg'])    
 
 d = 10
 r = d/2
@@ -94,7 +98,7 @@ def create_svg_circles(lines, image_width, image_height):
 def create_svg_rectangles(lines, image_width, image_height):
     #print(lines)
     print('Draw SVG')
-    dwg = svgwrite.Drawing('test2.svg', size=('{}mm'.format(image_width), '{}mm'.format(image_height)), viewBox=('0 0 {} {}'.format(image_width*d,image_height*d)))
+    dwg = svgwrite.Drawing(SVG_PATH, size=('{}mm'.format(image_width), '{}mm'.format(image_height)), viewBox=('0 0 {} {}'.format(image_width*d,image_height*d)))
     for line_number, stack_line in enumerate(lines):
         print('Proceed line: {}/{}'.format(line_number, image_height), end='\r')
         rect_y = d*line_number
